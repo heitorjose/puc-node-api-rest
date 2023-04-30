@@ -7,4 +7,4 @@ app.use(bodyParser.json())
 require('./src/routes/index')(app);
 app.use(cors());
 app.use(express.json());
-app.listen(3333);
+app.listen(8080);
