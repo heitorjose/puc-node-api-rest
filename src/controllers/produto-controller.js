@@ -1,54 +1,33 @@
 const produtos = require('../data/produtos.json');
-const Produto = require('../models/produto');
-exports.post = (req, res, next) => {
-   let id = req.body.id
-   if (id==null || id==undefined || !produtos.includes(x=>x.id==id)) {
-      res.status(500).send("Erro - id não pode ser nulo ou já existe"); 
-   }
-   // produtos.push(req.body)
-    create()
-    res.status(201).send();
- };
-
- async function create() {
-   await Produto.create({
-   marca: 'ford',
-   valor: 10,
-   descricao: 'Um mouse USB bonitão'
-})}
-
-async function findAll()  {
-  return await Produto.findAll()
-}
-  
- exports.put = (req, res, next) => {
-    let id = req.params.id;
-    if (id==null || id==undefined) {
-      res.status(500).send("Erro - id não pode ser nulo"); 
-   }
-   produtos.forEach( (item, index) => {
-      if(item.id == id) {
-     produtos[index].descricao = req.body.descricao
-     produtos[index].marca = req.body.marca
-     produtos[index].valor = req.body.valor
-    }});
-    res.status(200).json();
+const Produto = require('../models/model-produto')
+exports.post =  async (req, res, next) => {
+   let produto = await Produto.create(req.body)
+   res.status(201).json(produto)
+ }
+exports.put = async (req, res, next) => {
+   let id = req.params.id;
+   let produto = await Produto.findByPk(id)
+   produto.marca = req.body['marca']
+   produto.valor = req.body['valor']
+   produto.descricao = req.body['descricao']
+   let produtoUpedated = await produto.save()
+    res.status(200).json(produtoUpedated);
  };
   
- exports.delete = (req, res, next) => {
+ exports.delete = async (req, res, next) => {
     let id = req.params.id;
-    produtos.forEach( (item, index) => {
-      if(item.id == id) {
-       produtos.splice(index,1);
-    }});
+    let produto = await Produto.findByPk(id);
+    await produto.destroy();
     res.status(200).send();
  };
   
- exports.get = (req, res, next) => {
-    res.status(200).json(findAll());
+ exports.get = async (req, res, next) => {
+    const produtos  = await Produto.findAll()
+    res.status(200).json(produtos);
  };
   
- exports.getById = (req, res, next) => {
+ exports.getById = async (req, res, next) => {
     let id = req.params.id;
-    res.status(200).json(produtos.filter(x=>x.id==id));
+    let produto = await Produto.findByPk(id)
+    res.status(200).json(produto);
  };
