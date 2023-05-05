@@ -2,7 +2,6 @@ const produtos = require('../data/produtos.json');
 
 exports.post = (req, res, next) => {
    let id = req.body.id
-   console.log(produtos.includes(x=>x.id===id))
    if (id==null || id==undefined || produtos.find(x=>x.id==id)!=null) {
     res.status(500).send("Erro - id não pode ser nulo ou já existe"); 
     return
